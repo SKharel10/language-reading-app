@@ -1,0 +1,15 @@
+services:
+  postgres:
+    image: postgres:17
+    container_name: language-reading-postgres
+    environment:
+      POSTGRES_DB: language_app
+      POSTGRES_USER: language_app
+      POSTGRES_PASSWORD: language_app
+    ports:
+      - "5444:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
