@@ -9,6 +9,15 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
+    services:
+      postgres:
+        image: postgres:17
+        env:
+          POSTGRES_USER: language_app
+          POSTGRES_PASSWORD: language_app
+        ports:
+          - 5444:5432
+
     defaults:
       run:
         working-directory: backend
