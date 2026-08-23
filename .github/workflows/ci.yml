@@ -9,10 +9,18 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
+
+    env:
+      DB_URL: jdbc:postgresql://localhost:5444/language_app
+      DB_USERNAME: language_app
+      DB_PASSWORD: language_app
+
+
     services:
       postgres:
         image: postgres:17
         env:
+          POSTGRES_DB: language_app
           POSTGRES_USER: language_app
           POSTGRES_PASSWORD: language_app
         ports:
