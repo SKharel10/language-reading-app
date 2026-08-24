@@ -18,7 +18,9 @@ public class Book {
   private CEFRLevel level;
 
   private String coverImageUrl;
-  @OneToMany private List<Chapter> chapters;
+
+  @OneToMany(mappedBy = "book")
+  private List<Chapter> chapters;
 
   protected Book() {}
 }

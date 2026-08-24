@@ -10,6 +10,7 @@ public class Page {
   @Id private UUID id;
   private Integer number;
   private String content;
+
   @ManyToOne private Chapter chapter;
 
   protected Page() {}
