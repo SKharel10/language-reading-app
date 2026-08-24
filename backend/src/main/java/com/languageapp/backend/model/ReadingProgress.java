@@ -1,17 +1,22 @@
 package com.languageapp.backend.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 import java.util.UUID;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Entity
+@Getter
+@NoArgsConstructor
+@AllArgsConstructor
 public class ReadingProgress {
-  @Id private UUID id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.UUID)
+  UUID id;
+
   @ManyToOne private User user;
   @ManyToOne private Book book;
   private Integer currentPage;
   private Integer currentChapter;
-
-  protected ReadingProgress() {}
 }
