@@ -5,6 +5,7 @@ import java.util.UUID;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Getter
@@ -15,7 +16,7 @@ public class Page {
   @GeneratedValue(strategy = GenerationType.UUID)
   UUID id;
 
-  private Integer number;
-  private String content;
-  @ManyToOne private Chapter chapter;
+  @Setter private Integer number;
+  @Setter private String content;
+  @Setter @ManyToOne private Chapter chapter;
 }

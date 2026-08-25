@@ -6,6 +6,7 @@ import java.util.UUID;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @NoArgsConstructor
@@ -17,9 +18,10 @@ public class Chapter {
   UUID id;
 
   @OneToMany(mappedBy = "chapter", cascade = CascadeType.ALL, orphanRemoval = true)
+  @Setter
   private List<Page> pages;
 
-  private String name;
-  private Integer number;
-  @ManyToOne private Book book;
+  @Setter private String name;
+  @Setter private Integer number;
+  @Setter @ManyToOne private Book book;
 }
