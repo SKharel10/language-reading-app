@@ -5,6 +5,7 @@ import java.util.UUID;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Getter
@@ -18,11 +19,14 @@ public class ReadingProgress {
 
   @JoinColumn(name = "user_id")
   @ManyToOne
+  @Setter
   private User user;
 
   @JoinColumn(name = "book_id")
+  @Setter
   @ManyToOne
   private Book book;
 
+  @Setter
   @ManyToOne private Page page;
 }
