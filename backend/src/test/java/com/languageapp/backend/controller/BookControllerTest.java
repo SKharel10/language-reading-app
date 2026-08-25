@@ -69,20 +69,20 @@ class BookControllerTest {
                                               ]
                                             }"""))
         .andExpect(status().isCreated())
-            .andExpect(jsonPath("$.id").value(id.toString()))
-            .andExpect(jsonPath("$.title").value("Book title"))
-            .andExpect(jsonPath("$.language").value("ENGLISH"))
-            .andExpect(jsonPath("$.level").value("B1"));
-
+        .andExpect(jsonPath("$.id").value(id.toString()))
+        .andExpect(jsonPath("$.title").value("Book title"))
+        .andExpect(jsonPath("$.language").value("ENGLISH"))
+        .andExpect(jsonPath("$.level").value("B1"));
   }
 
   @Test
   public void createBook_WithInvalidRequest_Returns400() throws Exception {
-    mockMvc.perform(
+    mockMvc
+        .perform(
             post("/api/books")
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .content(
-                            """
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(
+                    """
                                     {
                                                           "title": "",
                                                           "description": "Book description",
@@ -91,17 +91,17 @@ class BookControllerTest {
                                                           "coverImageUrl": "test.jpg",
                                                           "chapters": []
                                                         }
-                                    
-                                    """
-                    )
-    ).andExpect(status().isBadRequest());
+
+                                    """))
+        .andExpect(status().isBadRequest());
   }
 
   @Test
   public void getAllBooks_returnsBooks() throws Exception {
     UUID id = UUID.randomUUID();
 
-    BookResponseDto book = new BookResponseDto(
+    BookResponseDto book =
+        new BookResponseDto(
             id,
             "Book title",
             "Book description",
@@ -110,15 +110,15 @@ class BookControllerTest {
             "test.jpg",
             List.of());
 
-    when (bookService.getAllBooks()).thenReturn(List.of(book));
+    when(bookService.getAllBooks()).thenReturn(List.of(book));
 
     mockMvc
-            .perform(get("/api/books"))
-            .andExpect(status().isOk())
-            .andExpect(jsonPath("$[0].id").value(id.toString()))
-            .andExpect(jsonPath("$[0].title").value("Book title"))
-            .andExpect(jsonPath("$[0].language").value("ENGLISH"))
-            .andExpect(jsonPath("$[0].level").value("B1"));
+        .perform(get("/api/books"))
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$[0].id").value(id.toString()))
+        .andExpect(jsonPath("$[0].title").value("Book title"))
+        .andExpect(jsonPath("$[0].language").value("ENGLISH"))
+        .andExpect(jsonPath("$[0].level").value("B1"));
   }
 
   @Test
@@ -127,9 +127,9 @@ class BookControllerTest {
     when(bookService.getAllBooks()).thenReturn(List.of());
 
     mockMvc
-            .perform(get("/api/books"))
-            .andExpect(status().isOk())
-            .andExpect(jsonPath("$").isEmpty());
+        .perform(get("/api/books"))
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$").isEmpty());
   }
 
   @Test
@@ -138,31 +138,29 @@ class BookControllerTest {
     UUID id = UUID.randomUUID();
 
     BookResponseDto book =
-            new BookResponseDto(
-                    id,
-                    "Book title",
-                    "Book description",
-                    Language.ENGLISH,
-                    CEFRLevel.B1,
-                    "test.jpg",
-                    List.of());
+        new BookResponseDto(
+            id,
+            "Book title",
+            "Book description",
+            Language.ENGLISH,
+            CEFRLevel.B1,
+            "test.jpg",
+            List.of());
 
     when(bookService.getBookById(id)).thenReturn(java.util.Optional.of(book));
 
     mockMvc
-            .perform(get("/api/books/{id}", id))
-            .andExpect(status().isOk())
-            .andExpect(jsonPath("$.id").value(id.toString()))
-            .andExpect(jsonPath("$.title").value("Book title"))
-            .andExpect(jsonPath("$.language").value("ENGLISH"))
-            .andExpect(jsonPath("$.level").value("B1"));
+        .perform(get("/api/books/{id}", id))
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$.id").value(id.toString()))
+        .andExpect(jsonPath("$.title").value("Book title"))
+        .andExpect(jsonPath("$.language").value("ENGLISH"))
+        .andExpect(jsonPath("$.level").value("B1"));
   }
 
   @Test
   void getBook_withInvalidId_returns400() throws Exception {
-    mockMvc
-            .perform(get("/api/books/not-a-uuid"))
-            .andExpect(status().isBadRequest());
+    mockMvc.perform(get("/api/books/not-a-uuid")).andExpect(status().isBadRequest());
   }
 
   @Test
@@ -172,9 +170,7 @@ class BookControllerTest {
 
     when(bookService.getBookById(id)).thenReturn(java.util.Optional.empty());
 
-    mockMvc
-            .perform(get("/api/books/{id}", id))
-            .andExpect(status().isNotFound());
+    mockMvc.perform(get("/api/books/{id}", id)).andExpect(status().isNotFound());
   }
 
   @Test
@@ -184,8 +180,6 @@ class BookControllerTest {
 
     doNothing().when(bookService).deleteBookById(id);
 
-    mockMvc
-            .perform(delete("/api/books/{id}", id))
-            .andExpect(status().isNoContent());
+    mockMvc.perform(delete("/api/books/{id}", id)).andExpect(status().isNoContent());
   }
 }

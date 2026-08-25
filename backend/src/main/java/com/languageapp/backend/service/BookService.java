@@ -35,7 +35,7 @@ public class BookService {
   }
 
   public List<BookResponseDto> getAllBooks() {
-     return bookRepository.findAll().stream().map(bookMapper::toDto).toList();
+    return bookRepository.findAll().stream().map(bookMapper::toDto).toList();
   }
 
   public Optional<BookResponseDto> getBookById(UUID id) {
