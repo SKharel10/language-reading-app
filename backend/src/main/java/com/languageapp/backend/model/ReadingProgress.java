@@ -10,13 +10,19 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
+@Table(uniqueConstraints = @UniqueConstraint(columnNames = {"user_id", "book_id"}))
 public class ReadingProgress {
   @Id
   @GeneratedValue(strategy = GenerationType.UUID)
   UUID id;
 
-  @ManyToOne private User user;
-  @ManyToOne private Book book;
-  private Integer currentPage;
-  private Integer currentChapter;
+  @JoinColumn(name = "user_id")
+  @ManyToOne
+  private User user;
+
+  @JoinColumn(name = "book_id")
+  @ManyToOne
+  private Book book;
+
+  @ManyToOne private Page page;
 }
