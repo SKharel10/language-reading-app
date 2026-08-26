@@ -11,8 +11,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface ReadingProgressRepository extends JpaRepository<ReadingProgress, UUID> {
     Optional<ReadingProgress> findByUserIdAndBookId(UUID userId, UUID bookId);
     boolean existsByUserIdAndBookId(UUID userId, UUID bookId);
-
-    UUID user(User user);
+    void deleteByUserIdAndBookId(UUID userId, UUID bookId);
 
     UUID user(User user);
 }
