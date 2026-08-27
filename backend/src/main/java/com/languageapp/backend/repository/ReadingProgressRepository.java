@@ -1,5 +1,6 @@
 package com.languageapp.backend.repository;
 
+import com.languageapp.backend.model.Book;
 import com.languageapp.backend.model.ReadingProgress;
 
 import java.util.Optional;
@@ -12,6 +13,4 @@ public interface ReadingProgressRepository extends JpaRepository<ReadingProgress
     Optional<ReadingProgress> findByUserIdAndBookId(UUID userId, UUID bookId);
     boolean existsByUserIdAndBookId(UUID userId, UUID bookId);
     void deleteByUserIdAndBookId(UUID userId, UUID bookId);
-
-    UUID user(User user);
 }
