@@ -10,7 +10,6 @@ import com.languageapp.backend.repository.PageRepository;
 import com.languageapp.backend.repository.ReadingProgressRepository;
 import com.languageapp.backend.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -35,20 +34,38 @@ public class ReadingProgressService {
         return readingProgressRepository.findAll().stream().map(mapper::toDto).toList();
     }
 
-    public Optional<ReadingProgressResponseDto> saveBookReadingProgress(UUID userId, UUID bookId, ReadingProgressRequestDto request) {
-        ReadingProgress readingProgress = readingProgressRepository.findByUserIdAndBookId(userId, bookId).orElseGet(() -> mapper.toEntity(request));
-        Page page = pageRepository.findById(request.pageId()).orElse(null);
+    public Optional<ReadingProgressResponseDto> createBookReadingProgress(UUID userId, UUID bookId, ReadingProgressRequestDto request) {
+        if (readingProgressRepository.findByUserIdAndBookId(userId, bookId).isPresent()) {
+            return Optional.empty();
+        }
+        ReadingProgress readingProgress = mapper.toEntity(request);
 
-        if (page == null) {
+        readingProgress.setUser(userRepository.findById(userId).orElseThrow(IllegalStateException::new));
+        readingProgress.setBook(bookRepository.findById(bookId).orElseThrow(IllegalStateException::new));
+
+        Optional<Page> page = pageRepository.findById(request.pageId());
+        if (page.isEmpty()) {
+            return Optional.empty();
+        }
+        readingProgress.setPage(page.get());
+        return Optional.ofNullable(mapper.toDto(readingProgressRepository.save(readingProgress)));
+    }
+
+    public Optional<ReadingProgressResponseDto> updateBookReadingProgress(UUID userId, UUID bookId, ReadingProgressRequestDto request) {
+        Optional<ReadingProgress> readingProgress = readingProgressRepository.findByUserIdAndBookId(userId, bookId);
+
+        if (readingProgress.isEmpty()) {
             return Optional.empty();
         }
 
-        if (readingProgress.getBook() == null || readingProgress.getUser() == null) {
-            readingProgress.setBook(bookRepository.findById(bookId).orElseThrow(IllegalStateException::new));
-            readingProgress.setUser(userRepository.findById(userId).orElseThrow(IllegalStateException::new));
+        Optional<Page> page = pageRepository.findById(request.pageId());
+
+        if (page.isEmpty()) {
+            return Optional.empty();
         }
-        readingProgress.setPage(page);
-        ReadingProgress saved = readingProgressRepository.save(readingProgress);
+
+        readingProgress.get().setPage(page.get());
+        ReadingProgress saved = readingProgressRepository.save(readingProgress.get());
         return Optional.ofNullable(mapper.toDto(saved));
     }
 
