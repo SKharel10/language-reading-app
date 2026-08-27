@@ -1,4 +1,4 @@
-package com.languageapp.backend.dto.request;
+package com.languageapp.backend.dto.response;
 
 import java.util.UUID;
 
