@@ -27,6 +27,5 @@ public class ReadingProgress {
   @ManyToOne
   private Book book;
 
-  @Setter
-  @ManyToOne private Page page;
+  @Setter @ManyToOne private Page page;
 }

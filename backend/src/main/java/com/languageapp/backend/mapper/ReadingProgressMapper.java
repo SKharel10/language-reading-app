@@ -7,6 +7,7 @@ import org.mapstruct.Mapper;
 
 @Mapper(componentModel = "spring")
 public interface ReadingProgressMapper {
-    ReadingProgress toEntity(ReadingProgressRequestDto request);
-    ReadingProgressResponseDto toDto(ReadingProgress readingProgress);
+  ReadingProgress toEntity(ReadingProgressRequestDto request);
+
+  ReadingProgressResponseDto toDto(ReadingProgress readingProgress);
 }
