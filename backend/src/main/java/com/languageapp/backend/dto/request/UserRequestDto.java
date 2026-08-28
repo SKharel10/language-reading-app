@@ -1,3 +1,7 @@
 package com.languageapp.backend.dto.request;
 
-public record UserRequestDto(String name) {}
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
+
+public record UserRequestDto(
+        @NotBlank @Size(min = 2, max = 70) String name) {}
