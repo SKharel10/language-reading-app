@@ -18,8 +18,9 @@ public class UserService {
 
   public UserResponseDto createUser(UserRequestDto request) {
     User user = userMapper.toEntity(request);
-    userRepository.save(user);
-    return userMapper.toDto(user);
+    User savedUser = userRepository.save(user);
+
+    return userMapper.toDto(savedUser);
   }
 
   public Optional<UserResponseDto> getUser(UUID id) {
