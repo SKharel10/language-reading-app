@@ -20,7 +20,7 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
 @WebMvcTest(ReadingProgressController.class)
-public class ReadingProgressControllerTest {
+public class ReadingProgressControllerTests {
 
   @Autowired private MockMvc mockMvc;
   @MockitoBean private ReadingProgressService readingProgressService;

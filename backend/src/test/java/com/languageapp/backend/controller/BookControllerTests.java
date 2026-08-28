@@ -1,6 +1,5 @@
 package com.languageapp.backend.controller;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
@@ -23,7 +22,7 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
 @WebMvcTest(BookController.class)
-class BookControllerTest {
+class BookControllerTests {
 
   @Autowired private MockMvc mockMvc;
   @MockitoBean private BookService bookService;
