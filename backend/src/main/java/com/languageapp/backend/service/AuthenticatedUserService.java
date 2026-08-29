@@ -12,10 +12,15 @@ public class AuthenticatedUserService {
 
     private final UserRepository userRepository;
 
-    public User getCurrentUser(Jwt jwt) {
+    public User getOrCreateUser(Jwt jwt) {
         String auth0Id = jwt.getSubject();
 
-        return userRepository.findByAuth0Id(auth0Id).orElseThrow(() ->
-                new RuntimeException("User not found"));
+        return userRepository.findByAuth0Id(auth0Id)
+                .orElseGet(() -> {
+                    User user = new User();
+                    user.setAuth0Id(auth0Id);
+
+                    return userRepository.save(user);
+                });
     }
 }
