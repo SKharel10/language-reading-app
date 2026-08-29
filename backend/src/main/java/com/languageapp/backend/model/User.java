@@ -16,9 +16,11 @@ public class User {
   @Id
   @GeneratedValue(strategy = GenerationType.UUID)
   private UUID id;
+
   @Column(nullable = false, unique = true)
   @Setter
   private String auth0Id;
+
   @Setter private String name;
 
   @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)

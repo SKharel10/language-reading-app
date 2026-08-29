@@ -10,17 +10,19 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class AuthenticatedUserService {
 
-    private final UserRepository userRepository;
+  private final UserRepository userRepository;
 
-    public User getOrCreateUser(Jwt jwt) {
-        String auth0Id = jwt.getSubject();
+  public User getOrCreateUser(Jwt jwt) {
+    String auth0Id = jwt.getSubject();
 
-        return userRepository.findByAuth0Id(auth0Id)
-                .orElseGet(() -> {
-                    User user = new User();
-                    user.setAuth0Id(auth0Id);
+    return userRepository
+        .findByAuth0Id(auth0Id)
+        .orElseGet(
+            () -> {
+              User user = new User();
+              user.setAuth0Id(auth0Id);
 
-                    return userRepository.save(user);
-                });
-    }
+              return userRepository.save(user);
+            });
+  }
 }
