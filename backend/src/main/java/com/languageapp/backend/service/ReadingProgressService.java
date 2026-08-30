@@ -14,6 +14,7 @@ import java.util.Optional;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -72,6 +73,7 @@ public class ReadingProgressService {
     return Optional.ofNullable(mapper.toDto(saved));
   }
 
+  @Transactional
   public boolean deleteReadingProgress(UUID userId, UUID bookId) {
     if (readingProgressRepository.existsByUserIdAndBookId(userId, bookId)) {
       readingProgressRepository.deleteByUserIdAndBookId(userId, bookId);
