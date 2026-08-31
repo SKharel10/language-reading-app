@@ -2,24 +2,28 @@ name: CI
 
 on:
   push:
-
-  paths: 
-    - 'backend/**'
-    - '.github/workflows/ci.yml'
+    paths:
+      - 'backend/**'
+      - '.github/workflows/ci.yml'
 
   pull_request:
     branches: [main]
+    paths:
+      - 'backend/**'
+      - '.github/workflows/ci.yml'
+
+permissions:
+  contents: read
 
 jobs:
   build:
     runs-on: ubuntu-latest
-
+    timeout-minutes: 10
 
     env:
       DB_URL: jdbc:postgresql://localhost:5444/language_app
       DB_USERNAME: language_app
       DB_PASSWORD: language_app
-
 
     services:
       postgres:
@@ -30,6 +34,11 @@ jobs:
           POSTGRES_PASSWORD: language_app
         ports:
           - 5444:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
 
     defaults:
       run:
@@ -38,7 +47,7 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-      
+
       - name: Set up Java
         uses: actions/setup-java@v5
         with:
@@ -47,6 +56,4 @@ jobs:
           cache: gradle
 
       - name: Run tests and formatting
-        run: ./gradlew test spotlessCheck
-
-
+        run: ./gradlew spotlessCheck test
