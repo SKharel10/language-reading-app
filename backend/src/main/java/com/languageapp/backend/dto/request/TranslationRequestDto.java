@@ -5,8 +5,4 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
 public record TranslationRequestDto(
-        @NotNull Language sourceLanguage,
-        @NotBlank String text,
-        String context
-) {
-}
+    @NotNull Language sourceLanguage, @NotBlank String text, String context) {}
