@@ -2,6 +2,8 @@ package com.languageapp.backend.controller;
 
 import com.languageapp.backend.dto.request.UserRequestDto;
 import com.languageapp.backend.dto.response.UserResponseDto;
+import com.languageapp.backend.model.User;
+import com.languageapp.backend.service.AuthenticatedUserService;
 import com.languageapp.backend.service.UserService;
 import jakarta.validation.Valid;
 import java.util.Optional;
@@ -9,6 +11,8 @@ import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -17,6 +21,20 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
 
   private final UserService userService;
+  private final AuthenticatedUserService authenticatedUserService;
+
+  @GetMapping("/me")
+  public ResponseEntity<UserResponseDto> getCurrentUser(@AuthenticationPrincipal Jwt jwt) {
+    User user = authenticatedUserService.getOrCreateUser(jwt);
+    return ResponseEntity.ok(userService.getUser(user.getId()).orElseThrow());
+  }
+
+  @PutMapping("/me")
+  public ResponseEntity<UserResponseDto> updateCurrentUser(
+      @AuthenticationPrincipal Jwt jwt, @Valid @RequestBody UserRequestDto request) {
+    User user = authenticatedUserService.getOrCreateUser(jwt);
+    return ResponseEntity.ok(userService.updateUser(user.getId(), request).orElseThrow());
+  }
 
   @PostMapping
   public ResponseEntity<UserResponseDto> createUser(@Valid @RequestBody UserRequestDto request) {
