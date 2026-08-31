@@ -10,7 +10,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.languageapp.backend.config.SecurityConfig;
 import com.languageapp.backend.dto.request.UserRequestDto;
 import com.languageapp.backend.dto.response.UserResponseDto;
+import com.languageapp.backend.model.User;
+import com.languageapp.backend.service.AuthenticatedUserService;
 import com.languageapp.backend.service.UserService;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import org.junit.jupiter.api.Test;
@@ -18,6 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -27,6 +31,70 @@ public class UserControllerTests {
 
   @Autowired private MockMvc mockMvc;
   @MockitoBean private UserService userService;
+  @MockitoBean private AuthenticatedUserService authenticatedUserService;
+
+  @Test
+  void getCurrentUser_returns200() throws Exception {
+    UUID id = UUID.randomUUID();
+
+    when(authenticatedUserService.getOrCreateUser(any(Jwt.class)))
+        .thenReturn(new User(id, "auth0|test-user", "James Smith", List.of()));
+    when(userService.getUser(id)).thenReturn(Optional.of(new UserResponseDto(id, "James Smith")));
+
+    mockMvc
+        .perform(get("/api/users/me").with(jwt()))
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$.id").value(id.toString()))
+        .andExpect(jsonPath("$.name").value("James Smith"));
+  }
+
+  @Test
+  void updateCurrentUser_returns200() throws Exception {
+    UUID id = UUID.randomUUID();
+
+    when(authenticatedUserService.getOrCreateUser(any(Jwt.class)))
+        .thenReturn(new User(id, "auth0|test-user", "Old Name", List.of()));
+    when(userService.updateUser(eq(id), any(UserRequestDto.class)))
+        .thenReturn(Optional.of(new UserResponseDto(id, "New Name")));
+
+    mockMvc
+        .perform(
+            put("/api/users/me")
+                .with(jwt())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(
+                    """
+                    {
+                        "name": "New Name"
+                    }
+                    """))
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$.id").value(id.toString()))
+        .andExpect(jsonPath("$.name").value("New Name"));
+  }
+
+  @Test
+  void updateCurrentUser_withInvalidRequest_returns400() throws Exception {
+    UUID id = UUID.randomUUID();
+
+    when(authenticatedUserService.getOrCreateUser(any(Jwt.class)))
+        .thenReturn(new User(id, "auth0|test-user", "Old Name", List.of()));
+
+    mockMvc
+        .perform(
+            put("/api/users/me")
+                .with(jwt())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(
+                    """
+                    {
+                        "name": ""
+                    }
+                    """))
+        .andExpect(status().isBadRequest());
+
+    verify(userService, never()).updateUser(any(), any());
+  }
 
   @Test
   void createUser_returns201() throws Exception {
