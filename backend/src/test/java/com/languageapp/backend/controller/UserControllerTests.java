@@ -2,10 +2,12 @@ package com.languageapp.backend.controller;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.jwt;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.languageapp.backend.config.SecurityConfig;
 import com.languageapp.backend.dto.request.UserRequestDto;
 import com.languageapp.backend.dto.response.UserResponseDto;
 import com.languageapp.backend.service.UserService;
@@ -14,11 +16,13 @@ import java.util.UUID;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
 @WebMvcTest(UserController.class)
+@Import(SecurityConfig.class)
 public class UserControllerTests {
 
   @Autowired private MockMvc mockMvc;
@@ -36,6 +40,7 @@ public class UserControllerTests {
     mockMvc
         .perform(
             post("/api/users")
+                .with(jwt())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(
                     """
@@ -56,6 +61,7 @@ public class UserControllerTests {
     mockMvc
         .perform(
             post("/api/users")
+                .with(jwt())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(
                     """
@@ -75,7 +81,7 @@ public class UserControllerTests {
     when(userService.getUser(id)).thenReturn(Optional.of(response));
 
     mockMvc
-        .perform(get("/api/users/{id}", id))
+        .perform(get("/api/users/{id}", id).with(jwt()))
         .andExpect(status().isOk())
         .andExpect(jsonPath("$.id").value(id.toString()))
         .andExpect(jsonPath("$.name").value("James Smith"));
@@ -87,7 +93,7 @@ public class UserControllerTests {
 
     when(userService.getUser(id)).thenReturn(Optional.empty());
 
-    mockMvc.perform(get("/api/users/{id}", id)).andExpect(status().isNotFound());
+    mockMvc.perform(get("/api/users/{id}", id).with(jwt())).andExpect(status().isNotFound());
   }
 
   @Test
@@ -101,6 +107,7 @@ public class UserControllerTests {
     mockMvc
         .perform(
             put("/api/users/{id}", id)
+                .with(jwt())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(
                     """
@@ -122,6 +129,7 @@ public class UserControllerTests {
     mockMvc
         .perform(
             put("/api/users/{id}", id)
+                .with(jwt())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(
                     """
@@ -139,6 +147,7 @@ public class UserControllerTests {
     mockMvc
         .perform(
             put("/api/users/{id}", id)
+                .with(jwt())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(
                     """
@@ -157,7 +166,7 @@ public class UserControllerTests {
 
     when(userService.deleteById(id)).thenReturn(true);
 
-    mockMvc.perform(delete("/api/users/{id}", id)).andExpect(status().isNoContent());
+    mockMvc.perform(delete("/api/users/{id}", id).with(jwt())).andExpect(status().isNoContent());
   }
 
   @Test
@@ -166,6 +175,6 @@ public class UserControllerTests {
 
     when(userService.deleteById(id)).thenReturn(false);
 
-    mockMvc.perform(delete("/api/users/{id}", id)).andExpect(status().isNotFound());
+    mockMvc.perform(delete("/api/users/{id}", id).with(jwt())).andExpect(status().isNotFound());
   }
 }
