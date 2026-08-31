@@ -48,7 +48,12 @@ dependencies {
     annotationProcessor 'org.projectlombok:lombok-mapstruct-binding:0.2.0'
 }
 
-tasks.named('test') {
+tasks.named('test', Test) {
     useJUnitPlatform()
+    environment "AUTH_DOMAIN", "https://dev-grcge20hek7mebm4.us.auth0.com/"
+    environment "AUTH_AUDIENCE", "https://language-reading-app-api.com"
+    environment "DB_URL", "jdbc:postgresql://localhost:5444/language_app"
+    environment "DB_USERNAME", "language_app"
+    environment "DB_PASSWORD", "language_app"
+    environment "GEMINI_API_KEY", "test-key"
 }
-

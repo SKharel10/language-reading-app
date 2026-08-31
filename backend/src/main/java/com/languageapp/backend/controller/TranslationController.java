@@ -11,11 +11,10 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/translations")
 public class TranslationController {
-    private final TranslationService translationService;
+  private final TranslationService translationService;
 
-    @PostMapping
-    public TranslationResponseDto translate(@Valid @RequestBody TranslationRequestDto request) {
-        return translationService.translate(request);
-    }
-
+  @PostMapping
+  public TranslationResponseDto translate(@Valid @RequestBody TranslationRequestDto request) {
+    return translationService.translate(request);
+  }
 }
