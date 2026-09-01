@@ -1,6 +1,7 @@
 "use client";
 
 import { useUser } from "@auth0/nextjs-auth0/client";
+import { useCurrentUser } from "@/src/lib/current-user-context";
 
 function getInitials(name?: string | null, email?: string | null): string {
   if (name) {
@@ -15,6 +16,7 @@ function getInitials(name?: string | null, email?: string | null): string {
 
 export default function Profile() {
   const { user, isLoading } = useUser();
+  const currentUser = useCurrentUser();
 
   if (isLoading) return <p className="text-xs text-gray-500">Loading...</p>;
   if (!user) return null;
@@ -45,6 +47,11 @@ export default function Profile() {
         </span>
         <span className="truncate">{user.email}</span>
       </div>
+      {currentUser && (
+        <p className="text-[11px] text-gray-400">
+          DB user id: {currentUser.id}
+        </p>
+      )}
     </>
   );
 }
