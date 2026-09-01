@@ -1,3 +1,5 @@
+import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
 import { auth0 } from "@/src/lib/auth0";
 import LoginButton from "@/src/components/LoginButton";
 import LogoutButton from "@/src/components/LogoutButton";
@@ -6,6 +8,13 @@ import Profile from "@/src/components/Profile";
 export default async function Home() {
   const session = await auth0.getSession();
   const user = session?.user;
+
+  if (user) {
+    const cookieStore = await cookies();
+    if (!cookieStore.get("language") || !cookieStore.get("level")) {
+      redirect("/onboarding");
+    }
+  }
 
   return (
     <main className="min-h-screen bg-[#efefef] flex flex-col items-center justify-center gap-4 px-6 py-12">
