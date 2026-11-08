@@ -23,24 +23,6 @@ export default function Profile() {
 
   return (
     <>
-      <div className="flex items-center gap-2 text-green-500 text-[13px] font-medium">
-        <span className="w-5 h-5 bg-green-500 rounded-full flex items-center justify-center shrink-0">
-          <svg
-            width="10"
-            height="8"
-            viewBox="0 0 10 8"
-            fill="none">
-            <path
-              d="M1 4L3.5 6.5L9 1"
-              stroke="white"
-              strokeWidth="1.5"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-          </svg>
-        </span>
-        Successfully authenticated
-      </div>
       <div className="flex items-center gap-2 bg-gray-100 rounded-full py-1.5 pl-1.5 pr-4 text-[12px] text-gray-700 max-w-full">
         <span className="w-7 h-7 bg-gradient-to-b from-[#2d2d42] to-[#161620] rounded-full flex items-center justify-center text-white text-[10px] font-semibold shrink-0">
           {getInitials(user.name, user.email)}
@@ -48,8 +30,8 @@ export default function Profile() {
         <span className="truncate">{user.email}</span>
       </div>
       {currentUser && (
-        <p className="text-[11px] text-gray-400">
-          DB user id: {currentUser.id}
+        <p className="text-[13px] text-gray-500">
+          Welcome back, {currentUser.name}
         </p>
       )}
     </>

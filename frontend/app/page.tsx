@@ -145,24 +145,15 @@ export default async function Home() {
         ) : (
           <>
             <h1 className="text-[17px] font-bold text-gray-900 tracking-tight">
-              Welcome to Sample0
+              Welcome to Bookdrift
             </h1>
             <p className="text-[13px] text-gray-400 text-center leading-relaxed -mt-2">
-              Get started by logging in to your account
+              Learn a new language by reading books written for your level.
             </p>
             <div className="h-3" />
             <LoginButton />
           </>
         )}
-      </div>
-
-      <div className="flex items-center gap-1.5 text-[11px] text-gray-400">
-        <span>Powered by</span>
-        <img
-          src="https://cdn.auth0.com/quantum-assets/dist/latest/logos/auth0/auth0-lockup-en-onlight.svg"
-          alt="Auth0"
-          className="h-3 opacity-40"
-        />
       </div>
     </main>
   );

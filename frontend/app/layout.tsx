@@ -13,8 +13,9 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Auth0 Next.js App",
-  description: "Next.js app with Auth0 authentication",
+  title: "Bookdrift",
+  description:
+    "Learn a new language by reading books written for your level.",
 };
 
 export default async function RootLayout({
